@@ -1,26 +1,58 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 const fetch = require("node-fetch")
 
-fetch('https://jsonplaceholder.typicode.com/users')
-  .then(response => response.json())
-  .then(data => logData(data))
+module.exports = {
+  fetchUsers: () => {
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => response.json())
+      .then(data => displayData(data))
+    },
+  fetchUserInfo: (id) => {
+    fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then(response => response.json())
+      .then(data => createPopUp(data, id))
+  }
+}
 
-const variable = 1
-
-const logData = data => {
-  // console.log(data);
+const displayData = data => {
   console.log(data)
   data.forEach(datum => {
-    console.log(datum)
     let node = document.createElement("LI")
+    node.value = datum.id
+    node.id = datum.id
     let textNode = document.createTextNode(`${datum.name}`)
     node.appendChild(textNode)
-    document.getElementById('users').appendChild(node)
-    console.log(variable + 1)
+    document.getElementById('userList').appendChild(node)
   })
 }
 
-},{"node-fetch":2}],2:[function(require,module,exports){
+const createPopUp = (data, id) => {
+  console.log(data)
+  let parent = document.getElementById(id)
+  let node = document.createElement("LI")
+  let textNode = document.createTextNode(
+    `phone number: ${data.phone},
+     email: ${data.email},
+     website: ${data.website}`
+  )
+  node.appendChild(textNode)
+  parent.appendChild(node)
+}
+
+},{"node-fetch":3}],2:[function(require,module,exports){
+const fetchAPI = require('./fetch.js')
+
+
+fetchAPI.fetchUsers()
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('userList').addEventListener('click', function(e) {
+    console.log(e.target.value)
+    fetchAPI.fetchUserInfo(e.target.value)
+  })
+})
+
+},{"./fetch.js":1}],3:[function(require,module,exports){
 (function (global){
 "use strict";
 
@@ -46,4 +78,4 @@ exports.Headers = global.Headers;
 exports.Request = global.Request;
 exports.Response = global.Response;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}]},{},[1]);
+},{}]},{},[2]);
