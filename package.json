@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Noejoaquin/js_play#readme",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
