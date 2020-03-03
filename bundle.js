@@ -29,7 +29,7 @@ const displayData = data => {
 const createPopUp = (data, id) => {
   console.log(data)
   let parent = document.getElementById(id)
-  let node = document.createElement("LI")
+  let node = document.createElement("SPAN")
   let textNode = document.createTextNode(
     `phone number: ${data.phone},
      email: ${data.email},
@@ -45,11 +45,24 @@ const fetchAPI = require('./fetch.js')
 
 fetchAPI.fetchUsers()
 
+let open = new Set()
+
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('userList').addEventListener('click', function(e) {
-    console.log(e.target.value)
-    fetchAPI.fetchUserInfo(e.target.value)
+    const userId = e.target.value
+    if(open.has(userId)) {
+      let li = document.getElementById(`${userId}`)
+      closeInfo(li)
+      open.delete(userId)
+    } else {
+      fetchAPI.fetchUserInfo(e.target.value)
+      open.add(userId)
+    }
   })
+
+  function closeInfo(li) {
+    li.removeChild(li.lastChild)
+  }
 })
 
 },{"./fetch.js":1}],3:[function(require,module,exports){
